@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NK KAMI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Welcome Page Styles */
+        .welcome-page {
+            background: linear-gradient(135deg, #1e1b4b, #1e3a8a, #3730a3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-elements {
+            position: absolute;
+            inset: 0;
+        }
+
+        .bg-circle {
+            position: absolute;
+            width: 288px;
+            height: 288px;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.2;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .bg-circle-1 {
+            top: 25%;
+            left: 25%;
+            background: #8b5cf6;
+        }
+
+        .bg-circle-2 {
+            top: 75%;
+            right: 25%;
+            background: #3b82f6;
+            animation-delay: 1s;
+        }
+
+        .bg-circle-3 {
+            bottom: 25%;
+            left: 50%;
+            background: #6366f1;
+            animation-delay: 2s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        .welcome-content {
+            text-align: center;
+            z-index: 10;
+            transition: all 0.7s ease;
+        }
+
+        .welcome-content.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #a855f7, #ec4899, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: slideUp 1s ease 0.5s forwards;
+        }
+
+        .sub-title {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fbbf24, #ef4444, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            letter-spacing: 0.2em;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: slideUp 1s ease 0.7s forwards, titlePulse 2s ease-in-out 1.2s infinite;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            font-weight: bold;
+            padding: 1rem 3rem;
+            border-radius: 9999px;
+            font-size: 1.25rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: scale(1);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            opacity: 0;
+            animation: slideUp 1s ease 1s forwards;
+        }
+
+        .start-button:hover {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Auth Page Styles */
+        .auth-page {
+            background: linear-gradient(135deg, #1e1b4b, #1e3a8a, #3730a3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .auth-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 28rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .auth-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-title h2 {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-title p {
+            color: #d1d5db;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .form-input:focus {
+            outline: none;
+            ring: 2px solid #8b5cf6;
+            border-color: transparent;
+        }
+
+        .auth-button {
+            width: 100%;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            transform: scale(1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .auth-button:hover {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            transform: scale(1.02);
+        }
+
+        .auth-switch {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .auth-switch p {
+            color: #d1d5db;
+        }
+
+        .auth-switch button {
+            background: none;
+            border: none;
+            color: #a855f7;
+            font-weight: 500;
+            margin-left: 0.5rem;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .auth-switch button:hover {
+            color: #d8b4fe;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-page {
+            background: linear-gradient(135deg, #1e1b4b, #1e3a8a, #3730a3);
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-content {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .header-info h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .header-info p {
+            color: #d1d5db;
+        }
+
+        .logout-button {
+            background: #dc2626;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .logout-button:hover {
+            background: #b91c1c;
+        }
+
+        .dashboard-content {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            transform: scale(1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .card-icon {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+        }
+
+        .card-icon.purple {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        }
+
+        .card-icon.green {
+            background: linear-gradient(135deg, #059669, #3b82f6);
+        }
+
+        .card-icon.yellow {
+            background: linear-gradient(135deg, #d97706, #ea580c);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            color: #d1d5db;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-button {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .card-button.green {
+            background: linear-gradient(135deg, #059669, #3b82f6);
+        }
+
+        .card-button.green:hover {
+            background: linear-gradient(135deg, #047857, #2563eb);
+        }
+
+        .card-button.yellow {
+            background: linear-gradient(135deg, #d97706, #ea580c);
+        }
+
+        .card-button.yellow:hover {
+            background: linear-gradient(135deg, #b45309, #c2410c);
+        }
+
+        .card-button:hover {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+        }
+
+        /* Course Page Styles */
+        .course-page {
+            background: linear-gradient(135deg, #1e1b4b, #1e3a8a, #3730a3);
+            min-height: 100vh;
+        }
+
+        .course-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .course-header-content {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-button {
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            background: none;
+            border: none;
+        }
+
+        .back-button:hover {
+            color: #d1d5db;
+        }
+
+        .course-content {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .upload-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .upload-section h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-align: center;
+            transition: border-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .upload-zone svg {
+            width: 4rem;
+            height: 4rem;
+            color: #9ca3af;
+            margin: 0 auto 1rem;
+        }
+
+        .upload-zone p {
+            color: white;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-zone .subtitle {
+            color: #9ca3af;
+            font-size: 1rem;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .upload-button {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .upload-button:hover {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+        }
+
+        .upload-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .video-preview {
+            aspect-ratio: 16/9;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .video-preview video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-placeholder {
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        .video-placeholder svg {
+            width: 4rem;
+            height: 4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-info h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .video-info p {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .play-button {
+            flex: 1;
+            background: linear-gradient(135deg, #059669, #3b82f6);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 0.875rem;
+        }
+
+        .play-button:hover {
+            background: linear-gradient(135deg, #047857, #2563eb);
+        }
+
+        .delete-button {
+            background: #dc2626;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 0.875rem;
+        }
+
+        .delete-button:hover {
+            background: #b91c1c;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .empty-state svg {
+            width: 6rem;
+            height: 6rem;
+            color: #6b7280;
+            margin: 0 auto 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #9ca3af;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+
+            .sub-title {
+                font-size: 3rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .videos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .alert {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+            color: white;
+        }
+
+        .alert.error {
+            background: rgba(220, 38, 38, 0.2);
+            border: 1px solid #dc2626;
+        }
+
+        .alert.success {
+            background: rgba(5, 150, 105, 0.2);
+            border: 1px solid #059669;
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Page -->
+    <div id="welcomePage" class="page active welcome-page">
+        <div class="background-elements">
+            <div class="bg-circle bg-circle-1"></div>
+            <div class="bg-circle bg-circle-2"></div>
+            <div class="bg-circle bg-circle-3"></div>
+        </div>
+        
+        <div class="welcome-content" id="welcomeContent">
+            <h1 class="main-title">WELCOME TO</h1>
+            <h2 class="sub-title">NK KAMI</h2>
+            <button class="start-button" onclick="showAuthPage()">LET'S START</button>
+        </div>
+    </div>
+
+    <!-- Auth Page -->
+    <div id="authPage" class="page auth-page">
+        <div class="auth-container">
+            <div class="auth-title">
+                <h2 id="authTitle">Welcome Back</h2>
+                <p id="authSubtitle">Sign in to your account</p>
+            </div>
+
+            <form id="authForm">
+                <div class="form-group" id="nameGroup" style="display: none;">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" class="form-input" placeholder="Enter your name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                </div>
+                
+                <div class="form-group" id="confirmPasswordGroup" style="display: none;">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password">
+                </div>
+                
+                <button type="submit" class="auth-button" id="authButton">Sign In</button>
+            </form>
+            
+            <div class="auth-switch">
+                <p id="switchText">Don't have an account? 
+                    <button type="button" id="switchButton" onclick="toggleAuthMode()">Sign Up</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="page dashboard-page">
+        <div class="dashboard-header">
+            <div class="header-content">
+                <div class="header-info">
+                    <h1>NK KAMI Dashboard</h1>
+                    <p>Welcome back, <span id="userName">User</span>!</p>
+                </div>
+                <button class="logout-button" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="cards-grid">
+                <div class="card" onclick="showCoursePage()">
+                    <div class="card-icon purple">📚</div>
+                    <h3>PW Course</h3>
+                    <p>Manage your video courses and learning materials</p>
+                    <button class="card-button">Open Course</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon green">📊</div>
+                    <h3>Progress</h3>
+                    <p>Track your learning progress and achievements</p>
+                    <button class="card-button green">View Progress</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon yellow">⚙️</div>
+                    <h3>Settings</h3>
+                    <p>Customize your learning experience</p>
+                    <button class="card-button yellow">Open Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Page -->
+    <div id="coursePage" class="page course-page">
+        <div class="course-header">
+            <div class="course-header-content">
+                <button class="back-button" onclick="showDashboard()">←</button>
+                <div>
+                    <h1 style="color: white; font-size: 1.5rem; font-weight: bold;">PW Course</h1>
+                    <p style="color: #d1d5db;">Manage your video library</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="course-content">
+            <div class="upload-section">
+                <h2>Add New Video</h2>
+                
+                <div class="upload-zone" onclick="document.getElementById('videoInput').click()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21,15 16,10 5,21"/>
+                    </svg>
+                    <p>Upload Video from Gallery</p>
+                    <p class="subtitle">Drag and drop or click to select video files</p>
+                    
+                    <input type="file" id="videoInput" class="upload-input" accept="video/*" onchange="handleVideoUpload(event)">
+                    <button type="button" class="upload-button" id="uploadButton">Choose Video File</button>
+                </div>
+            </div>
+
+            <div id="videosGrid" class="videos-grid">
+                <!-- Videos will be dynamically added here -->
+            </div>
+
+            <div id="emptyState" class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21,15 16,10 5,21"/>
+                </svg>
+                <h3>No Videos Yet</h3>
+                <p>Upload your first video to get started!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentUser = null;
+        let users = JSON.parse(localStorage.getItem('nk-kami-users') || '[]');
+        let videos = JSON.parse(localStorage.getItem('nk-kami-videos') || '[]');
+        let isLogin = true;
+
+        // Initialize app
+        function init() {
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('nk-kami-current-user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            }
+            
+            // Load videos if user is logged in
+            if (currentUser) {
+                loadVideos();
+            }
+        }
+
+        // Page navigation functions
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function showAuthPage() {
+            const welcomeContent = document.getElementById('welcomeContent');
+            welcomeContent.classList.add('hidden');
+            
+            setTimeout(() => {
+                showPage('authPage');
+            }, 300);
+        }
+
+        function showDashboard() {
+            if (currentUser) {
+                document.getElementById('userName').textContent = currentUser.name;
+            }
+            showPage('dashboardPage');
+        }
+
+        function showCoursePage() {
+            showPage('coursePage');
+            loadVideos();
+        }
+
+        // Auth functions
+        function toggleAuthMode() {
+            isLogin = !isLogin;
+            
+            const authTitle = document.getElementById('authTitle');
+            const authSubtitle = document.getElementById('authSubtitle');
+            const authButton = document.getElementById('authButton');
+            const switchText = document.getElementById('switchText');
+            const switchButton = document.getElementById('switchButton');
+            const nameGroup = document.getElementById('nameGroup');
+            const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+            
+            if (isLogin) {
+                authTitle.textContent = 'Welcome Back';
+                authSubtitle.textContent = 'Sign in to your account';
+                authButton.textContent = 'Sign In';
+                switchText.innerHTML = 'Don\'t have an account? <button type="button" id="switchButton" onclick="toggleAuthMode()">Sign Up</button>';
+                nameGroup.style.display = 'none';
+                confirmPasswordGroup.style.display = 'none';
+                document.getElementById('name').required = false;
+                document.getElementById('confirmPassword').required = false;
+            } else {
+                authTitle.textContent = 'Join NK KAMI';
+                authSubtitle.textContent = 'Create your account';
+                authButton.textContent = 'Sign Up';
+                switchText.innerHTML = 'Already have an account? <button type="button" id="switchButton" onclick="toggleAuthMode()">Sign In</button>';
+                nameGroup.style.display = 'block';
+                confirmPasswordGroup.style.display = 'block';
+                document.getElementById('name').required = true;
+                document.getElementById('confirmPassword').required = true;
+            }
+        }
+
+        function showAlert(message, type = 'error') {
+            // Remove existing alerts
+            const existingAlert = document.querySelector('.alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+
+            const alert = document.createElement('div');
+            alert.className = `alert ${type}`;
+            alert.textContent = message;
+            
+            const form = document.getElementById('authForm');
+            form.parentNode.insertBefore(alert, form);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Form submission
+        document.getElementById('authForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (isLogin) {
+                // Login logic
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('nk-kami-current-user', JSON.stringify(user));
+                    showDashboard();
+                } else {
+                    showAlert('Invalid credentials!');
+                }
+            } else {
+                // Register logic
+                const name = document.getElementById('name').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    showAlert('Passwords do not match!');
+                    return;
+                }
+                
+                const userExists = users.find(u => u.email === email);
+                if (userExists) {
+                    showAlert('User already exists!');
+                    return;
+                }
+                
+                const newUser = {
+                    id: Date.now(),
+                    name: name,
+                    email: email,
+                    password: password
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('nk-kami-users', JSON.stringify(users));
+                
+                currentUser = newUser;
+                localStorage.setItem('nk-kami-current-user', JSON.stringify(newUser));
+                showDashboard();
+            }
+        });
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('nk-kami-current-user');
+            showPage('welcomePage');
+        }
+
+        // Video upload and management
+        function handleVideoUpload(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('video/')) {
+                const uploadButton = document.getElementById('uploadButton');
+                uploadButton.textContent = 'Uploading...';
+                uploadButton.disabled = true;
+                
+                // Create object URL for video preview
+                const videoUrl = URL.createObjectURL(file);
+                
+                const newVideo = {
+                    id: Date.now(),
+                    name: file.name,
+                    url: videoUrl,
+                    addedAt: new Date().toLocaleString()
+                };
+
+                setTimeout(() => {
+                    videos.push(newVideo);
+                    localStorage.setItem('nk-kami-videos', JSON.stringify(videos));
+                    
+                    loadVideos();
+                    uploadButton.textContent = 'Choose Video File';
+                    uploadButton.disabled = false;
+                    event.target.value = ''; // Reset input
+                }, 1000);
+            } else {
+                showAlert('Please select a valid video file!');
+            }
+        }
+
+        function loadVideos() {
+            const videosGrid = document.getElementById('videosGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (videos.length === 0) {
+                videosGrid.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            videosGrid.style.display = 'grid';
+            emptyState.style.display = 'none';
+            
+            videosGrid.innerHTML = videos.map(video => `
+                <div class="video-card">
+                    <div class="video-preview">
+                        ${video.url ? 
+                            `<video src="${video.url}" controls preload="metadata" style="width: 100%; height: 100%; object-fit: cover;"></video>` :
+                            `<div class="video-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                                </svg>
+                                <p>Video Preview</p>
+                            </div>`
+                        }
+                    </div>
+                    
+                    <div class="video-info">
+                        <h3>${video.name}</h3>
+                        <p>Added: ${video.addedAt}</p>
+                        
+                        <div class="video-actions">
+                            <button class="play-button" onclick="playVideo('${video.url}')">Play</button>
+                            <button class="delete-button" onclick="deleteVideo(${video.id})">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function playVideo(url) {
+            if (url) {
+                // Create a modal or fullscreen video player
+                const videoModal = document.createElement('div');
+                videoModal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.9);
+                    z-index: 1000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                `;
+                
+                videoModal.innerHTML = `
+                    <div style="position: relative; width: 90%; height: 90%;">
+                        <video src="${url}" controls autoplay style="width: 100%; height: 100%; object-fit: contain;">
+                        </video>
+                        <button onclick="this.parentElement.parentElement.remove()" 
+                                style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); 
+                                       color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 20px;">
+                            ×
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(videoModal);
+                
+                // Close on click outside
+                videoModal.addEventListener('click', function(e) {
+                    if (e.target === videoModal) {
+                        videoModal.remove();
+                    }
+                });
+            }
+        }
+
+        function deleteVideo(id) {
+            if (confirm('Are you sure you want to delete this video?')) {
+                videos = videos.filter(v => v.id !== id);
+                localStorage.setItem('nk-kami-videos', JSON.stringify(videos));
+                loadVideos();
+            }
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
